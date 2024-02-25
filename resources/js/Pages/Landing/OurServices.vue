@@ -313,6 +313,7 @@ const procesos = [
                                     evento. Nos apasiona crear momentos únicos e impactantes que perduren en la memoria
                                     de quienes participan.
                                 </p>
+
                                 <div class="mt-sm-10 mt-5 border-top pt-3">
                                     <div class="d-flex align-center mb-2">
                                         <a class="text-decoration-none" href="tel:+573004361660" target="_blank">
