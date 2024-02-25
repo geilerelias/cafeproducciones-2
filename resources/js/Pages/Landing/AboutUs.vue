@@ -85,6 +85,7 @@ const features = [
                 </v-card>
             </v-container>
         </div>
+
         <section>
             <v-sheet class="transparent pb-6" light>
                 <div class="py-2">

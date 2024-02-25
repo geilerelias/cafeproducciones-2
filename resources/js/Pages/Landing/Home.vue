@@ -299,6 +299,7 @@ const notices = [
                                     </v-row>
                                 </v-img>
                             </v-card>
+
                             <v-sheet class="d-flex  theme--dark rounded-0" style="max-width: 100%;">
                                 <div class="grow pa-2 body-2">
                                     <div class="d-flex align-center fill-height">

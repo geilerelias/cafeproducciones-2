@@ -28,7 +28,6 @@ const imageLayout = [
                             height="100%"
                         ></v-img>
                     </v-col>
-
                     <v-col v-if="image.children" class="d-flex flex-column" cols="6">
                         <v-row>
                             <v-col v-for="(children,childIdx) in image.children" :key="childIdx" :cols="children.cols">

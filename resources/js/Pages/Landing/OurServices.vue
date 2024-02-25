@@ -300,6 +300,7 @@ const procesos = [
                                     nuevo
                                     proyecto
                                 </h2>
+
                                 <p class="text-muted text-body-1">
                                     En <span class="text-nova-round-regular">CAfE Producciones</span>,
                                     nos emociona cada
