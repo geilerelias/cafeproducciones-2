@@ -1,0 +1,63 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100&family=Nova+Round&family=Rubik+Mono+One&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+[x-cloak] {
+    display: none;
+}
+
+[type='text']:focus, input:where(:not([type])):focus, [type='email']:focus, [type='url']:focus, [type='password']:focus, [type='number']:focus, [type='date']:focus, [type='datetime-local']:focus, [type='month']:focus, [type='search']:focus, [type='tel']:focus, [type='time']:focus, [type='week']:focus, [multiple]:focus, textarea:focus, select:focus {
+    outline: 2px solid transparent;
+    /* outline-offset: 2px; */
+    --tw-ring-inset: none;
+    --tw-ring-offset-width: 0px;
+    --tw-ring-offset-color: none;
+    --tw-ring-color: none;
+    --tw-ring-offset-shadow: none;
+    --tw-ring-shadow: none;
+    box-shadow: none;
+    border-color: none;
+}
+
+.text-nova-round-regular {
+    font-family: "Nova Round", system-ui;
+    font-weight: 400;
+    font-style: normal;
+}
+
+
+.img-fluid {
+    max-width: 100%;
+    height: auto;
+}
+
+.browse-category .browse-img .browse-img-content {
+    bottom: 20px;
+    left: 25px
+}
+
+.browse-category .hover-card .zoom-in {
+    transition: all .2s ease-in-out
+}
+
+.browse-category .hover-card:hover .zoom-in {
+    transform: scale(1.1)
+}
+
+.hover-card .zoom-in {
+    transition: all .2s ease-in-out
+}
+
+.hover-card:hover .zoom-in {
+    transform: scale(1.1)
+}
+
+.mt-95 {
+    margin-top: 95px;
+}
+
+.service-video {
+    max-width: 1400px;
+}
