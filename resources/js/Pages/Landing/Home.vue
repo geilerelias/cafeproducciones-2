@@ -221,27 +221,27 @@ const notices = [
                     Nuestras principales características
                 </h1>
 
-                <div class="v-responsive base-divider bg-primary  mb-6" style="max-width: 28px;">
+                <v-responsive class=" base-divider bg-primary  mb-6" style="max-width: 28px;">
                     <v-divider style="padding-bottom: 1px"></v-divider>
-                </div>
+                </v-responsive>
 
                 <v-container class="pt-5 px-0 mb-12">
                     <v-row>
                         <v-col v-for="item in features" :key="item.id" :data-aos="mobile?'fade-up':'fade-right'"
                                class="col-md-6 col-12" data-aos-delay="200" data-aos-duration="1000">
-                            <v-row class="row pa-0 ma-0 text-center text-sm-left justify-center">
-                                <v-col class="col">
+                            <v-row class=" pa-0 ma-0 text-center text-sm-left justify-center">
+                                <v-col class="v-col-12">
                                     <v-icon :class="`${item.color}--text`" size="56">
                                         {{ item.icon }}
                                     </v-icon>
                                 </v-col>
 
-                                <v-col class="col-md-10 col-12">
+                                <v-col class="v-col-12">
                                     <h3
-                                        class="title font-weight-regular mb-3 mt-2">
+                                        class="text-title font-weight-bold mb-3 mt-2">
                                         {{ item.name }}
                                     </h3>
-                                    <p class="body-1 font-weight-light">
+                                    <p class="text-body-1 font-weight-light ">
                                         {{ item.description }}
                                     </p>
                                 </v-col>
