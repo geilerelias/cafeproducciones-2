@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100&family=Nova+Round&family=Rubik+Mono+One&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+[x-cloak] {
+    display: none;
+}
+
+[type='text']:focus, input:where(:not([type])):focus, [type='email']:focus, [type='url']:focus, [type='password']:focus, [type='number']:focus, [type='date']:focus, [type='datetime-local']:focus, [type='month']:focus, [type='search']:focus, [type='tel']:focus, [type='time']:focus, [type='week']:focus, [multiple]:focus, textarea:focus, select:focus {
+    outline: 2px solid transparent;
+    /* outline-offset: 2px; */
+    --tw-ring-inset: none;
+    --tw-ring-offset-width: 0px;
+    --tw-ring-offset-color: none;
+    --tw-ring-color: none;
+    --tw-ring-offset-shadow: none;
+    --tw-ring-shadow: none;
+    box-shadow: none;
+    border-color: none;
+}
+
+.text-nova-round-regular {
+    font-family: "Nova Round", system-ui;
+    font-weight: 400;
+    font-style: normal;
+}
