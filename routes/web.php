@@ -75,8 +75,9 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/gallery', function () {
     return Inertia::render('Gallery/Index');
 })->name('gallery');
 
-Route::get('/find/{page}/{folder?}', function ($page, $folder) {
-    $directory = base_path() . '/resources/images/' . $page . '/' . $folder;
+Route::get('/find/{page}/{folder?}', function ($page, $folder = null) {
+
+    $directory = base_path() . '/resources/images/' . $page . ($folder ? '/' . $folder : '');
     $dirint = dir($directory);
     $images = array();
     while (($archivo = $dirint->read()) !== false) {

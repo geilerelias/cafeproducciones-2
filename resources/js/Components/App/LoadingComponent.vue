@@ -14,8 +14,8 @@
 .spinner1 {
     align-items: center;
     border: .3em solid transparent;
-    border-top: .3em solid #10578b;
-    border-right: .3em solid #10578b;
+    border-top: .3em solid rgb(var(--v-theme-primary));;
+    border-right: .3em solid rgb(var(--v-theme-secondary));;
     border-radius: 100%;
     display: flex;
     justify-content: center;
@@ -47,6 +47,4 @@
         transform: rotate(360deg)
     }
 }
-
-/* Spinner 1 ends here */
 </style>

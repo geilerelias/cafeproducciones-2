@@ -1,11 +1,12 @@
 <script setup>
 import PageLayout from "@/Layouts/PageLayout.vue";
 import bg12 from '../../../images/bg/12.jpg'
-import {computed, onMounted, ref, watch} from 'vue';
+import {computed, nextTick, onMounted, ref, watch} from 'vue';
 import axios from 'axios';
 import {useDisplay} from "vuetify";
 import {Link} from "@inertiajs/vue3";
 import VueEasyLightbox from 'vue-easy-lightbox';
+import LoadingComponent from "@/Components/App/LoadingComponent.vue";
 
 const {xsOnly, xs, md, mobile, mdAndDown, mdAndUp, lgAndUp, smAndUp, smAndDown} = useDisplay()
 
@@ -14,7 +15,7 @@ const search = ref('')
 const selected = ref([])
 
 const allSelected = computed(() => {
-    return selected.value.length === allservices.length
+    return selected.value.length === allservices.value.length
 })
 
 function scrollTo(id) {
@@ -28,145 +29,146 @@ watch(selected, () => {
     search.value = ''
 })
 
-const allservices = [
-    {
-        name: 'transmision',
-        title: "Transmisión de eventos en vivo o diferido",
-        description: `Contamos con los equipos necesarios y de ultima tecnologia para Transmitir un evento en vivo,
+const allservices = ref(
+    [
+        {
+            name: 'transmision',
+            title: "Transmisión de eventos en vivo o diferido",
+            description: `Contamos con los equipos necesarios y de ultima tecnología para Transmitir un evento en vivo,
                 esto permite llegar a un público con el que antes
                 no contaba. Aquellos que por su situación geográfica no pueden asistir encontraran en su
                 página Web, su Blog o su cuenta en redes sociales las imágenes y el audio en vivo, en
                 tiempo real del evento. De esta manera cualquier persona conectada a la Internet, de
                 cualquier parte del mundo, podrá acompañar las actividades de forma práctica, original y
                 atrayente.`,
-        images: [],
-        firtImage: '',
-        gradient: false,
-    },
-    {
-        name: 'sonido',
-        title: "Sonido para auditorios y exteriores",
-        description: 'le ofrecemos sistemas de sonido de la más alta calidad para todo tipo de eventos, ' +
-            'utilizamos equipos de última generación y contamos con la capacidad de satisfacer las necesidades ' +
-            'de cualquier evento según la ocasión y el espacio.',
-        images: [],
-        firtImage: ''
-    },
-    {
-        name: 'montaje',
-        title: "Montaje de todo tipo de evento",
-        description: 'Nuestro equipo cuenta con la última tecnología de fácil ensamblaje, lo cual nos permite' +
-            ' optimizar los tiempos de montaje así como también los costos y es adaptable a casi cualquier tipo de superficie.'
-        ,
-        images: [],
-        firtImage: '',
-        gradient: false,
-    },
-    {
-        name: 'pirotecnia',
-        title: "Pirotecnia de escenarios y aéreas",
-        description: 'un espectáculo de pirotecnia puede presentarse en diversos formatos en función de varios ' +
-            'factores: celebración, lugar eb el que se llevará a cabo, duracción, presupuesto... Todos los ' +
-            'momentos especiales de nuestros clientes pueden convertirse en extraordinarios con espectáculos ' +
-            'de pirotecnia sin importar el tamaño del festejo o la cantidad de invitados.',
-        images: [],
-        firtImage: '',
-        gradient: false,
-    },
-    {
-        name: 'vallas',
-        title: "Vallas de contención de publico",
-        description: 'Se colocan en lugares públicos abiertos y/o cerrados  para delimitar espacios con motivo ' +
-            'de eventos temporales, como espectaculos, desfiles o procesiones, son en tubo galvanizado de 1.40 de alto X 2 mts de ancho con base de 60 mm, calibre de 1 ¼ ',
-        images: [],
-        firtImage: '',
-        gradient: false,
-    },
-    {
-        name: 'personal',
-        title: "Personal logístico",
-        description: 'La logística de un evento incluye la gestión de los servicios de soporte técnico y la ' +
-            'gestión competente del flujo de visitantes el día del evento (transporte, coordinación de acciones, ' +
-            'etc.) Para hacer frente con éxito a múltiples tareas, debe comprender los diferentes componentes de' +
-            ' un plan de logística para un evento y elaborar un plan de logística de eventos efectivo.',
-        images: [],
-        firtImage: '',
-        gradient: false,
-    },
-    {
-        name: 'moviliarios',
-        title: "Carpas, Sillas, Mesas, Computadores impresoras",
-        description: 'sabemos que cada cliente así como cada actividad es diferente, Por tal motivo le ofrecemos' +
-            ' alternativas innovadoras en estructuras como toldos y carpas, pisos, trussesde aluminio, stands y más.',
-        images: [],
-        firtImage: '',
-        gradient: false,
-    },
-    {
-        name: 'filmacion',
-        title: "Filmación en general - Entrevistas",
-        description: 'Contamos  con una amplia trayectoria en el mundo de la producción audiovisual, abarcando todo' +
-            ' tipo de trabajos, en función de las necesidades del cliente. Desde servicio de grabación hasta ' +
-            'vídeo interactivo, pasando por todo un abanico de servicios con diferentes finalidades: promocionar ' +
-            'la empresa, un perfil profesional, presentaciones de proyectos.',
-        images: [],
-        firtImage: '',
-        gradient: false,
-    },
-    {
-        name: 'refrigerios',
-        title: "Refrigerios",
-        description: 'Ofrecemos servicios de Brunch o Refrigerios de todo tipo para su empresa, pensado específicamente para cursos, seminarios o reuniones empresariales, con alimentos que deleitarán el paladar de sus empleados y/o clientes.',
-        images: [],
-        firtImage: '',
-        gradient: false,
-    },
-    {
-        name: 'pantallas',
-        title: "Pantallas",
-        description: `Ponemos a su disposición el Servicio de Alquiler de Pantallas para brindarle soluciones a
+            images: [],
+            firtImage: '',
+            gradient: false,
+        },
+        {
+            name: 'sonido',
+            title: "Sonido para auditorios y exteriores",
+            description: 'le ofrecemos sistemas de sonido de la más alta calidad para todo tipo de eventos, ' +
+                'utilizamos equipos de última generación y contamos con la capacidad de satisfacer las necesidades ' +
+                'de cualquier evento según la ocasión y el espacio.',
+            images: [],
+            firtImage: ''
+        },
+        {
+            name: 'montaje',
+            title: "Montaje de todo tipo de evento",
+            description: 'Nuestro equipo cuenta con la última tecnología de fácil ensamblaje, lo cual nos permite' +
+                ' optimizar los tiempos de montaje así como también los costos y es adaptable a casi cualquier tipo de superficie.'
+            ,
+            images: [],
+            firtImage: '',
+            gradient: false,
+        },
+        {
+            name: 'pirotecnia',
+            title: "Pirotecnia de escenarios y aéreas",
+            description: 'un espectáculo de pirotecnia puede presentarse en diversos formatos en función de varios ' +
+                'factores: celebración, lugar eb el que se llevará a cabo, duracción, presupuesto... Todos los ' +
+                'momentos especiales de nuestros clientes pueden convertirse en extraordinarios con espectáculos ' +
+                'de pirotecnia sin importar el tamaño del festejo o la cantidad de invitados.',
+            images: [],
+            firtImage: '',
+            gradient: false,
+        },
+        {
+            name: 'vallas',
+            title: "Vallas de contención de publico",
+            description: 'Se colocan en lugares públicos abiertos y/o cerrados  para delimitar espacios con motivo ' +
+                'de eventos temporales, como espectaculos, desfiles o procesiones, son en tubo galvanizado de 1.40 de alto X 2 mts de ancho con base de 60 mm, calibre de 1 ¼ ',
+            images: [],
+            firtImage: '',
+            gradient: false,
+        },
+        {
+            name: 'personal',
+            title: "Personal logístico",
+            description: 'La logística de un evento incluye la gestión de los servicios de soporte técnico y la ' +
+                'gestión competente del flujo de visitantes el día del evento (transporte, coordinación de acciones, ' +
+                'etc.) Para hacer frente con éxito a múltiples tareas, debe comprender los diferentes componentes de' +
+                ' un plan de logística para un evento y elaborar un plan de logística de eventos efectivo.',
+            images: [],
+            firtImage: '',
+            gradient: false,
+        },
+        {
+            name: 'moviliarios',
+            title: "Carpas, Sillas, Mesas, Computadores impresoras",
+            description: 'sabemos que cada cliente así como cada actividad es diferente, Por tal motivo le ofrecemos' +
+                ' alternativas innovadoras en estructuras como toldos y carpas, pisos, trussesde aluminio, stands y más.',
+            images: [],
+            firtImage: '',
+            gradient: false,
+        },
+        {
+            name: 'filmacion',
+            title: "Filmación en general - Entrevistas",
+            description: 'Contamos  con una amplia trayectoria en el mundo de la producción audiovisual, abarcando todo' +
+                ' tipo de trabajos, en función de las necesidades del cliente. Desde servicio de grabación hasta ' +
+                'vídeo interactivo, pasando por todo un abanico de servicios con diferentes finalidades: promocionar ' +
+                'la empresa, un perfil profesional, presentaciones de proyectos.',
+            images: [],
+            firtImage: '',
+            gradient: false,
+        },
+        {
+            name: 'refrigerios',
+            title: "Refrigerios",
+            description: 'Ofrecemos servicios de Brunch o Refrigerios de todo tipo para su empresa, pensado específicamente para cursos, seminarios o reuniones empresariales, con alimentos que deleitarán el paladar de sus empleados y/o clientes.',
+            images: [],
+            firtImage: '',
+            gradient: false,
+        },
+        {
+            name: 'pantallas',
+            title: "Pantallas",
+            description: `Ponemos a su disposición el Servicio de Alquiler de Pantallas para brindarle soluciones a
                 medida para su evento corporativo, cartelería digital, acto institucional o evento empresarial.
                 <br/>
                 Nuestro servicio de Alquiler de Pantallas  incluye el traslado, armado y desarmado de las pantallas y, opcionalmente, la operación de las mismas.`,
-        images: [],
-        firtImage: '',
-        gradient: false,
-    },
-    {
-        name: 'iluminacion',
-        title: "Iluminación",
-        description: `La iluminación para eventos es uno de los elementos de decoración con más relevancia a la
+            images: [],
+            firtImage: '',
+            gradient: false,
+        },
+        {
+            name: 'iluminacion',
+            title: "Iluminación",
+            description: `La iluminación para eventos es uno de los elementos de decoración con más relevancia a la
                 hora de organizarlos. Necesitas tener claro qué atmósfera quieres crear, ya que de la manera que
                 ilumines tu evento dependerá el ambiente que se genere.`,
-        images: [],
-        firtImage: '',
-        gradient: false,
-    },
-    {
-        name: 'piso-led',
-        title: "Piso led",
-        description: `diseñamos y disponemos de pistas y pisos Led para incorporar a cada evento. Nuestra
+            images: [],
+            firtImage: '',
+            gradient: false,
+        },
+        {
+            name: 'piso-led',
+            title: "Piso led",
+            description: `diseñamos y disponemos de pistas y pisos Led para incorporar a cada evento. Nuestra
                 tecnología permite manejo de color led, inscripción de texto en pista.
                 Los Pisos LED brindan luces y colores permitiendo crear la ambientación necesaria para tu evento.
                 Es ideal para escenarios o pistas de baile en discos, eventos, salones y fiestas, o pisos de stands en
                 exposiciones, o pasarelas en desfiles. Transmiten todo tipo de contenido y efectos luminosos.`,
-        images: [],
-        firtImage: '',
-        gradient: false,
-    },
-    {
-        name: 'escenografia',
-        title: "Escenografías",
-        description: `Nuestra vasta experiencia nos permite liderar todas las áreas necesarias para desarrollar
+            images: [],
+            firtImage: '',
+            gradient: false,
+        },
+        {
+            name: 'escenografia',
+            title: "Escenografías",
+            description: `Nuestra vasta experiencia nos permite liderar todas las áreas necesarias para desarrollar
                 un proyecto escenográfico integral e impactante.
                 Con mas de 5 años de trayectoria diseño & comunicación desarrollando proyectos de escenografía de alto
                 nivel con un equipo multidisciplinario con vasta experiencia que garantizan el mejor de los resultados.`,
-        images: [],
-        firtImage: '',
-        gradient: false,
-    },
+            images: [],
+            firtImage: '',
+            gradient: false,
+        },
 
-];
+    ]);
 
 const images = ref([
     "/services/vallas/01.jpg",
@@ -180,8 +182,8 @@ const active = ref(null);
 
 const services = computed(() => {
     const _search = search.value.toLowerCase()
-    if (!_search) return allservices
-    return allservices.filter(service => {
+    if (!_search) return allservices.value
+    return allservices.value.filter(service => {
         return service.name.toLowerCase().indexOf(_search) > -1 ||
             service.title.toLowerCase().indexOf(_search) > -1 ||
             service.description.toLowerCase().indexOf(_search) > -1
@@ -189,8 +191,9 @@ const services = computed(() => {
 });
 
 onMounted(async () => {
+    await nextTick(); // Espera a que Vue haya renderizado los cambios
     try {
-        for (const service of allservices) {
+        for (const service of allservices.value) {
             const {data} = await axios.get(`/find/services/${service.name}`);
             const images = data.map(filename => `/src/services/${service.name}/${filename}`);
             service.images = images;
@@ -313,7 +316,7 @@ const lightboxImages = ref([]);
 
 const showImg = (index) => {
     indexRef.value = index;
-    const service = allservices[index];
+    const service = allservices.value[index];
     lightboxImages.value = service.images.map(image => ({src: image}));
     visibleRef.value = true;
 }
@@ -389,12 +392,7 @@ const onHide = () => visibleRef.value = false;
                                         </div>
                                     </div>
                                     <template v-slot:placeholder>
-                                        <v-skeleton-loader
-                                            class="fill-height mx-auto"
-                                            elevation="2"
-                                            max-width="360"
-                                            type="image,image"
-                                        ></v-skeleton-loader>
+                                        <loading-component></loading-component>
                                     </template>
                                 </v-img>
                             </v-card>
@@ -628,6 +626,15 @@ const onHide = () => visibleRef.value = false;
 </template>
 
 <style scoped>
+
+.v-img__placeholder .v-skeleton-loader .v-skeleton-loader__image {
+    height: 100% !important;
+}
+
+div.v-img__placeholder.fade-transition-leave-from.fade-transition-leave-active > div > div {
+    height: 100% !important;
+}
+
 .bg-gradient {
     background: linear-gradient(to bottom, #10578b, #2ba9e1);
 }
