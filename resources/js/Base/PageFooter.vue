@@ -3,79 +3,45 @@ import logo from "@/../images/logo/logo-transparent.png"
 import {useLinksStore} from "../../stores/links.js";
 import {Link} from '@inertiajs/vue3'
 import WhatsappMessageButton from "@/Components/App/WhatsappMessageButton.vue";
+import {useTheme} from "vuetify";
+import {computed} from "vue";
 
-const empresa = {
-    nombre: "WirelessLink",
-    caracteristicas: [
-        "Enfoque Personalizado",
-        "Amplio Portafolio de Servicios",
-        "Presencia Nacional",
-        "Compromiso con la Calidad y la Innovación",
-        "Equipo Multidisciplinario y Experimentado"
-    ],
-    servicios: {
-        infraestructura: {
-            ultimaMilla: "Diseño y Suministro de Infraestructura en Ultima Milla",
-            wirelessYFibraOptica: "Wireless y Fibra Óptica"
-        },
-        administracionIP: "Administración de Servicios IP",
-        redesWifi: "Diseño, Implementación y Administración de Redes Wifi",
-        consultoriaAuditoriasTIC: "Servicios de Consultoría y Auditorias en TICS",
-        internet: {
-            conexion: "Brindamos el servicio de conexión a Internet",
-            fibraOpticaYRadio: "a partir de fibra óptica y radio enlaces",
-            planes: [
-                "Banda ancha residencial",
-                "Corporativo",
-                "Dedicado de alta calidad"
-            ]
-        },
-        telefoniaVoIP: "Servicio de Telefonía VoIP",
-        sistemasVigilancia: "SISTEMACCTV - Sistemas de Vigilancia en Video",
-        monitoreoAlarmas: "Sistema de Seguridad y Monitoreo Inalámbrico",
-        asesoriasConsultoriasTIC: "Asesorías y Consultorías sobre Tecnologías de Información y Comunicaciones",
-        suministros: {
-            computadoresTablet: "Computadores, Tablet, Portátiles, Accesorios y Partes",
-            dispositivosRed: "Dispositivo y Accesorios de Red y Conexiones de Wifi",
-            respaldoEnergia: "Sistemas de respaldo de Energía a partir de Paneles Solares",
-            torreTelecomunicaciones: "Estudio diseño y construcción de torre de telecomunicaciones"
-        }
-    },
-    contacto: {
-        direccion: "Calle 85 B # 71 A-30, Barrio El Limoncito, Barranquilla, Atlántico",
-        telefono: "300 355 1477",
-        whatsapp: "300 355 1477",
-        correo: "wirelesslinksas@gmail.com",
-        instagram: "wirelesslink_"
-    }
-}
+
 const linksStore = useLinksStore();
 
+
+const theme = useTheme()
+
+const isDarkTheme = computed(() => {
+    return theme.global.current.value.dark
+});
 </script>
 
 <template>
     <div>
-        <svg class="logos-bg" viewBox="0 0 1442 163" xmlns="http://www.w3.org/2000/svg">
+        <svg :class="{'svg-dark-theme': isDarkTheme, 'svg-light-theme': !isDarkTheme}" class="logos-bg"
+             viewBox="0 0 1442 163" xmlns="http://www.w3.org/2000/svg">
             <path
-                d="m-3.90909,6l48.30303,16c48.30303,16 144.90908,48 241.51514,48c96.60606,0 193.21211,-32 289.81817,-32c96.60606,0 193.21211,32 289.81817,53.3c96.60606,21.7 193.21211,31.7 289.81817,16c96.60606,-16.3 193.21211,-58.3 241.51514,-80l48.30303,-21.3l0,160l-48.30303,0c-48.30303,0 -144.90908,0 -241.51514,0c-96.60606,0 -193.21211,0 -289.81817,0c-96.60606,0 -193.21211,0 -289.81817,0c-96.60606,0 -193.21211,0 -289.81817,0c-96.60606,0 -193.21211,0 -241.51514,0l-48.30303,0l0,-160z"
-                data-v-49310640=""></path>
+                d="m-3.90909,6l48.30303,16c48.30303,16 144.90908,48 241.51514,48c96.60606,0 193.21211,-32 289.81817,-32c96.60606,0 193.21211,32 289.81817,53.3c96.60606,21.7 193.21211,31.7 289.81817,16c96.60606,-16.3 193.21211,-58.3 241.51514,-80l48.30303,-21.3l0,160l-48.30303,0c-48.30303,0 -144.90908,0 -241.51514,0c-96.60606,0 -193.21211,0 -289.81817,0c-96.60606,0 -193.21211,0 -289.81817,0c-96.60606,0 -193.21211,0 -289.81817,0c-96.60606,0 -193.21211,0 -241.51514,0l-48.30303,0l0,-160z"></path>
         </svg>
-        <v-footer class="bg-grey-lighten-4" style="z-index: 9 !important;">
-            <v-container class="py-5 bg-grey-lighten-4">
+
+        <v-footer :class="isDarkTheme?'bg-grey-darken-4':'bg-grey-lighten-4'" style="z-index: 9 !important;">
+            <v-container :class="isDarkTheme?'bg-grey-darken-4':'bg-grey-lighten-4'">
                 <v-row>
                     <v-col class="col-md-4 col-12">
                         <div class="text-h6 text-lg-h5 font-weight-bold">Navegación</div>
 
-                        <div class="v-responsive base-divider primary  mb-6" style="max-width: 28px;">
+                        <div class="v-responsive base-divider bg-primary  mb-6" style="max-width: 28px;">
                             <v-divider style="padding-bottom: 1px"></v-divider>
                         </div>
 
                         <div class="d-flex flex-wrap">
-
-                            <v-img :spect-ratio="5/4"
-                                   :src="logo"
-                                   contain gradient="to top, rgb(245 245 245), rgb(245 245 245 / 42%)"
-                                   style="max-height:200px">
+                            <v-img
+                                :gradient="isDarkTheme?'rgba(33,33,33,0.6) 40%,rgba(33,33,33,0.8) 70%':'to top, rgb(245 245 245), rgb(245 245 245 / 42%)'"
+                                :spect-ratio="5/4"
+                                :src="logo"
+                                contain
+                                style="max-height:200px">
 
                                 <div v-for="item in linksStore.links" :key="item.title"
                                      class="w-half body-1 mb-1">
@@ -139,13 +105,15 @@ const linksStore = useLinksStore();
                             <v-divider style="padding-bottom: 1px"></v-divider>
                         </div>
 
-                        <div class="d-flex flex-column flex-lg-row w-full">
-                            <v-text-field class="mr-lg-2" dense enclosed is-booted label="Your email"
-                                          light outlined single-line
+                        <div class="d-flex align-center flex-column flex-lg-row w-full mb-6">
+                            <v-text-field class="mr-lg-2" density="comfortable" enclosed hide-details
+                                          is-booted
+                                          label="Your email" light outlined
+                                          single-line
                                           solo variant="outlined">
                             </v-text-field>
-                            <v-btn class="bg-secondary" is-elevated large
-                                   light>
+                            <v-btn class="bg-secondary" is-elevated light
+                                   size="large">
                                 Subscribirse
                             </v-btn>
                         </div>
@@ -192,7 +160,15 @@ const linksStore = useLinksStore();
 </template>
 
 <style scoped>
+/* Tema claro */
+.svg-light-theme path {
+    fill: rgb(var(--v-theme-grey-lighten-4)); /* Ajusta el color según necesites para el tema claro */
+}
 
+/* Tema oscuro */
+.svg-dark-theme path {
+    fill: rgb(var(--v-theme-surface)); /* Ajusta el color según necesites para el tema oscuro */
+}
 
 .border-bottom {
     border-bottom: 2px solid rgb(var(--v-theme-accent));

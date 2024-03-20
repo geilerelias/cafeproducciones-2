@@ -1,23 +1,34 @@
 <script setup>
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import {ref} from "vue";
+import {Link, useForm} from '@inertiajs/vue3';
 import AuthenticationCard from '@/Components/AuthenticationCard.vue';
 import AuthenticationCardLogo from '@/Components/AuthenticationCardLogo.vue';
-import Checkbox from '@/Components/Checkbox.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
+import AuthLayout from "@/Layouts/AuthLayout.vue";
+import SpinnerComponent from "../../Components/App/SpinnerComponent.vue";
+
+const show = ref(null)
 
 defineProps({
     canResetPassword: Boolean,
     status: String,
 });
 
-const form = useForm({
+let form = useForm({
     email: '',
     password: '',
     remember: false,
 });
+
+
+const emailRules = {
+    required: v => !!v || 'E-mail is required',
+    valid: v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+};
+
+const passwordRules = {
+    required: v => !!v || 'Password is required.',
+    min: v => v.length >= 8 || 'Min 8 characters',
+};
 
 const submit = () => {
     form.transform(data => ({
@@ -27,64 +38,111 @@ const submit = () => {
         onFinish: () => form.reset('password'),
     });
 };
+
+const reset = () => {
+    form.clearErrors();
+    form.defaults({
+        email: '',
+        password: '',
+        remember: false
+    })
+    form.reset()
+}
 </script>
 
 <template>
-    <Head title="Log in" />
+    <auth-layout title="Ingresar">
 
-    <AuthenticationCard>
-        <template #logo>
-            <AuthenticationCardLogo />
-        </template>
+        <AuthenticationCard class="pa-2 pa-sm-8">
+            <template #logo>
+                <AuthenticationCardLogo/>
+                <h2 class="font-weight-bold mt-4 text-blue-grey-darken-2">Ingresar</h2>
+                <h6
+                    class="text-subtitle-1 mb-2"> ¿No tienes cuenta?
+                    <Link href="/register">
+                        registrarse
+                    </Link>
+                </h6>
+            </template>
 
-        <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
-            {{ status }}
-        </div>
-
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="email" value="Email" />
-                <TextInput
-                    id="email"
-                    v-model="form.email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    required
-                    autofocus
-                    autocomplete="username"
-                />
-                <InputError class="mt-2" :message="form.errors.email" />
+            <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
+                {{ status }}
             </div>
 
-            <div class="mt-4">
-                <InputLabel for="password" value="Password" />
-                <TextInput
-                    id="password"
-                    v-model="form.password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    required
-                    autocomplete="current-password"
-                />
-                <InputError class="mt-2" :message="form.errors.password" />
-            </div>
+            <form @submit.prevent="submit">
+                <div class="mt-4">
 
-            <div class="block mt-4">
-                <label class="flex items-center">
-                    <Checkbox v-model:checked="form.remember" name="remember" />
-                    <span class="ms-2 text-sm text-gray-600">Remember me</span>
-                </label>
-            </div>
+                    <v-text-field
+                        v-model="form.email"
+                        :error-messages="form.errors.email?form.errors.email:''"
+                        :rules="[emailRules.required,emailRules.valid]"
+                        density="comfortable"
+                        label="E-mail"
+                        name="email"
+                        required
+                        variant="outlined"
+                    >
+                    </v-text-field>
 
-            <div class="flex items-center justify-end mt-4">
-                <Link v-if="canResetPassword" :href="route('password.request')" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                    Forgot your password?
-                </Link>
+                    <!--<InputLabel for="email" value="Email"/>-->
 
-                <PrimaryButton class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Log in
-                </PrimaryButton>
-            </div>
-        </form>
-    </AuthenticationCard>
+                    <!--<InputError :message="form.errors.email" class="mt-2"/>-->
+                </div>
+
+                <div class="mt-4">
+                    <!--
+                                        <InputLabel for="password" value="Password"/>
+                    -->
+                    <v-text-field
+                        v-model="form.password"
+                        :append-inner-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+                        :error-messages="form.errors.password?form.errors.password:''"
+                        :rules="[passwordRules.required,passwordRules.min]"
+                        :type="show ? 'text' : 'password'"
+                        autocomplete="new-password"
+                        dense
+                        density="comfortable"
+                        hint="At least 8 characters"
+                        label="password"
+                        name="password"
+                        required
+                        variant="outlined"
+                        @click:append-inner="show = !show"
+                        @keyup.enter="submit"
+                    ></v-text-field>
+
+                    <!--                    <InputError :message="form.errors.password" class="mt-2"/>-->
+                </div>
+
+                <div class="d-flex flex-column-reverse flex-sm-row align-center justify-space-between  mb-sm-0">
+                    <v-checkbox
+                        v-model="form.remember"
+                        label="Recuérdame"
+                    ></v-checkbox>
+                    <div v-if="canResetPassword" class="ml-sm-auto mt-1 mt-sm-n6">
+                        <Link :href="route('password.request')">Olvidé mi contraseña
+                        </Link>
+                    </div>
+
+                </div>
+
+
+                <v-btn :disabled="form.processing" block class="mr-4 mb-4 " color="primary" contained
+                       type="submit"
+                >
+                    Ingresar
+                </v-btn>
+                <v-btn block class="mr-4 mb-4" color="primary" variant="outlined"
+                       @click="reset"
+                >
+                    Reiniciar formulario
+                </v-btn>
+
+                <spinner-component :opacity="0.9" :value="form.processing"></spinner-component>
+
+            </form>
+        </AuthenticationCard>
+
+
+    </auth-layout>
 </template>

@@ -166,7 +166,7 @@ import PageLayout from "@/Layouts/PageLayout.vue";
         </v-container>
 
 
-        <div class="bg-white py-md-15 py-sm-8 py-8">
+        <div class="bg-background py-md-15 py-sm-8 py-8">
             <div class="py-md-9 py-2">
                 <v-container>
                     <v-row class="justify-space-between">

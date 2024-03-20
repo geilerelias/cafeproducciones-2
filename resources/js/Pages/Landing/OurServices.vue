@@ -487,14 +487,14 @@ const onHide = () => visibleRef.value = false;
                     </div>
                     <div class="mt-4">
                         <Link href="/about-us">
-                            <v-btn class="my-1 "
-                                   elevated>
+                            <v-btn class="my-1 bg-primary" elevated flat
+                                   rounded>
                                 Saber más
                             </v-btn>
                         </Link>
                         <Link href="/contact-us">
-                            <v-btn class="my-1 mx-sm-2  primary"
-                                   elevated>
+                            <v-btn class="my-1 mx-sm-2 " color="" elevated rounded
+                                   variant="outlined">
                                 Contactanos
                             </v-btn>
                         </Link>

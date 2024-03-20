@@ -27,6 +27,10 @@ function toggleTheme() {
     theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
 }
 
+const isDarkTheme = computed(() => {
+    return theme.global.current.value.dark
+});
+
 defineProps({
     clippedLeft: {
         default: () => {
@@ -78,17 +82,26 @@ const back = () => {
 
 const showText = ref({});
 
+const navClasses = computed(() => {
+    /* { 'bg-transparent white--text': isTransparent && isHomePage,
+         'bg-white': !isTransparent || !isHomePage }*/
+
+    return {
+        'bg-transparent white--text': isTransparent.value && isHomePage.value,
+    };
+
+});
 </script>
 <template>
     <v-app-bar
-        :class="{ 'bg-transparent white--text': isTransparent && isHomePage, 'bg-white': !isTransparent || !isHomePage }"
+        :class="navClasses"
         class="px-sm-12 px-auto py-4"
         density="compact"
         scroll-behavior="elevate">
         <template v-slot:prepend>
             <transition mode="out-in" name="custom-transition">
                 <div v-if="!(isTransparent && isHomePage)" key="logo-section" class="d-flex align-center"
-                     style="max-width: 170px">
+                     style="max-width: 200px">
                     <logo :color="'primary'" :size="45"></logo>
                     <div
                         class=" ml-2 text-decoration-none font-weight-bold text-sm-title-1 text-md-h5 text-md-h6 text-nova-round-regular">
@@ -111,10 +124,10 @@ const showText = ref({});
             <div>
                 <v-btn
                     :class="{
-                        'active text-secondary font-weight-black': isCurrentRoute(item.route) &&!(isTransparent && isHomePage) ,
-                        'active text-white font-weight-black': (isTransparent && isHomePage) && isCurrentRoute(item.route),
+                        'active text-secondary font-weight-black': !isDarkTheme &&isCurrentRoute(item.route) &&!(isTransparent && isHomePage) ,
+                        'active text-white font-weight-black': (isTransparent && isHomePage) && isCurrentRoute(item.route)||isDarkTheme,
                         'text-black': !isCurrentRoute(item.route) && (!isTransparent || !isHomePage),
-                        'text-white': isTransparent && isHomePage
+                        'text-white': isTransparent && isHomePage ||isDarkTheme
                       }"
                     :variant="isCurrentRoute(item.route)?'outlined':'text'"
                     class="overline font-weight-bold custom-btn"

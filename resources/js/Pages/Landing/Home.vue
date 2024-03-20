@@ -8,8 +8,9 @@ import eventoOim from '../../../images/gallery/eventooim.jpg'
 import guerraDj from '../../../images/gallery/guerradj.jpg'
 import PageLayout from "@/Layouts/PageLayout.vue";
 import TeamComponent from "@/Components/App/TeamComponent.vue";
-import {useDisplay} from "vuetify";
+import {useDisplay, useTheme} from "vuetify";
 import {Link} from "@inertiajs/vue3";
+import {computed} from "vue";
 
 const {xsOnly, xs, md, mobile, mdAndDown, mdAndUp, lgAndUp, smAndUp, smAndDown} = useDisplay()
 
@@ -88,6 +89,12 @@ const notices = [
     }
 ];
 
+const theme = useTheme()
+
+const isDarkTheme = computed(() => {
+    return theme.global.current.value.dark
+});
+
 </script>
 
 <template>
@@ -151,9 +158,10 @@ const notices = [
                             </div>
                         </div>
 
-                        <svg style="height: 100% !important; width:100% !important;"
-                             viewBox="0 0 1428 174"
+                        <svg :class="{'svg-dark-theme': isDarkTheme, 'svg-light-theme': !isDarkTheme}"
+                             style="height: 100% !important; width:100% !important;" viewBox="0 0 1428 174"
                              xmlns="http://www.w3.org/2000/svg">
+
                             <g fill="none" fill-rule="evenodd" stroke="none" stroke-width="1">
                                 <g fill="#FFFFFF" fill-rule="nonzero"
                                    transform="translate(-2.000000, 44.000000)">
@@ -322,11 +330,41 @@ const notices = [
                 </v-row>
             </v-container>
         </v-sheet>
-
+        <section>
+            <v-container class="container py-8">
+                <div class="text-center">
+                    <div>
+                        <div class=" text-h6">¿Quieres hablar con nosotros?</div>
+                        <div class=" mt-1">Nuestro equipo esta aquí para ayudar.</div>
+                    </div>
+                    <div class="mt-4">
+                        <Link href="/about-us">
+                            <v-btn class="my-1 bg-primary" elevated flat
+                                   rounded>
+                                Saber más
+                            </v-btn>
+                        </Link>
+                        <Link href="/contact-us">
+                            <v-btn class="my-1 mx-sm-2 " color="" elevated rounded
+                                   variant="outlined">
+                                Contactanos
+                            </v-btn>
+                        </Link>
+                    </div>
+                </div>
+            </v-container>
+        </section>
     </page-layout>
 </template>
 
 <style scoped>
+/* Colores para el tema claro, puedes omitir esto si el blanco es el predeterminado */
+.svg-light-theme g {
+    fill: rgb(var(--v-theme-background)); /* Color para el tema claro */
+}
 
-</style>
+/* Colores para el tema oscuro */
+.svg-dark-theme g {
+    fill: rgb(var(--v-theme-background)); /* Cambia este color según necesites para el tema oscuro */
+}</style>
 

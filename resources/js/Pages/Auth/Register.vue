@@ -1,12 +1,14 @@
 <script setup>
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import {Link, useForm} from '@inertiajs/vue3';
 import AuthenticationCard from '@/Components/AuthenticationCard.vue';
 import AuthenticationCardLogo from '@/Components/AuthenticationCardLogo.vue';
-import Checkbox from '@/Components/Checkbox.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
+import AuthLayout from "../../Layouts/AuthLayout.vue";
+import {ref} from "vue";
+
+const show = ref(false)
+const show2 = ref(null)
 
 const form = useForm({
     name: '',
@@ -16,97 +18,168 @@ const form = useForm({
     terms: false,
 });
 
+
+const nameRules = [
+    v => !!v || 'El nombre es requerido',
+];
+const emailRules = [
+    v => !!v || 'El E-mail es requerido',
+    v => /.+@.+\..+/.test(v) || 'El email debe ser válido',
+];
+
+const passwordRules = [
+    value => !!value || 'La contraseña es requerida.',
+    v => v.length >= 8 || 'Mínimo 8 caracteres',
+];
+
+const confirmPasswordRules = [
+    (v) => !!v || 'La confirmación de contraseña es requerida',
+    (v) => v === form.password || 'Las contraseñas no coinciden',
+];
+
 const submit = () => {
     form.post(route('register'), {
         onFinish: () => form.reset('password', 'password_confirmation'),
     });
 };
+
+
+function reset() {
+
+}
 </script>
 
 <template>
-    <Head title="Register" />
+    <auth-layout title="Register">
 
-    <AuthenticationCard>
-        <template #logo>
-            <AuthenticationCardLogo />
-        </template>
+        <AuthenticationCard>
+            <template #logo>
+                <AuthenticationCardLogo/>
+                <h2 class="font-weight-bold mt-4 blue-grey--text text--darken-2">Registrarse</h2>
+                <h6 class=" mb-4"> ¿Ya tienes cuenta?
+                    <Link href="/login">Inicia sesión</Link>
+                </h6>
+            </template>
 
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="name" value="Name" />
-                <TextInput
-                    id="name"
-                    v-model="form.name"
-                    type="text"
-                    class="mt-1 block w-full"
-                    required
-                    autofocus
-                    autocomplete="name"
-                />
-                <InputError class="mt-2" :message="form.errors.name" />
-            </div>
+            <form @submit.prevent="submit">
+                <div>
+                    <v-text-field
+                        id="name"
+                        v-model="form.name"
+                        :error-messages="form.errors.name"
+                        :rules="nameRules"
+                        autocomplete="name"
+                        autofocus
+                        class="mt-1 block w-full"
+                        label="Nombres"
+                        required
+                        type="text"
+                        variant="outlined"
+                    />
+                </div>
+                <div class="mt-4">
+                    <v-text-field
+                        id="email"
+                        v-model="form.email"
+                        :error-messages="form.errors.email"
+                        :rules="emailRules"
+                        autocomplete="username"
+                        class="mt-1 block w-full"
+                        label="Email"
+                        required
+                        type="email"
+                        variant="outlined"
+                        @blur="form.clearErrors('email')"
+                    />
+                </div>
 
-            <div class="mt-4">
-                <InputLabel for="email" value="Email" />
-                <TextInput
-                    id="email"
-                    v-model="form.email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    required
-                    autocomplete="username"
-                />
-                <InputError class="mt-2" :message="form.errors.email" />
-            </div>
+                <div class="mt-4">
+                    <v-text-field
+                        id="password"
+                        v-model="form.password"
+                        :append-inner-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+                        :error-messages="form.errors.password"
+                        :rules="passwordRules"
+                        :type="show ? 'text' : 'password'"
+                        autocomplete="new-password"
+                        class="mt-1 block w-full"
+                        label="Contraseña"
+                        required
+                        type="password"
+                        variant="outlined"
+                        @click:append-inner="show = !show"
+                    />
+                </div>
 
-            <div class="mt-4">
-                <InputLabel for="password" value="Password" />
-                <TextInput
-                    id="password"
-                    v-model="form.password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    required
-                    autocomplete="new-password"
-                />
-                <InputError class="mt-2" :message="form.errors.password" />
-            </div>
+                <div class="mt-4">
+                    <v-text-field
+                        id="password_confirmation"
+                        v-model="form.password_confirmation"
+                        :append-inner-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
+                        :error-messages="form.errors.password_confirmation"
+                        :rules="confirmPasswordRules"
+                        :type="show2 ? 'text' : 'password'"
+                        autocomplete="new-password"
+                        class="mt-1 block w-full"
+                        label="Confirmar Contraseña"
+                        required
+                        type="password"
+                        variant="outlined"
+                        @click:append-inner="show2 = !show2"
 
-            <div class="mt-4">
-                <InputLabel for="password_confirmation" value="Confirm Password" />
-                <TextInput
-                    id="password_confirmation"
-                    v-model="form.password_confirmation"
-                    type="password"
-                    class="mt-1 block w-full"
-                    required
-                    autocomplete="new-password"
-                />
-                <InputError class="mt-2" :message="form.errors.password_confirmation" />
-            </div>
+                    />
+                </div>
 
-            <div v-if="$page.props.jetstream.hasTermsAndPrivacyPolicyFeature" class="mt-4">
-                <InputLabel for="terms">
-                    <div class="flex items-center">
-                        <Checkbox id="terms" v-model:checked="form.terms" name="terms" required />
+                <div v-if="$page.props.jetstream.hasTermsAndPrivacyPolicyFeature" class="mt-4">
+                    <InputLabel for="terms">
+                        <div class="flex items-center">
+                            <v-checkbox
+                                id="terms"
+                                v-model="form.terms"
+                                v-model:checked="form.terms"
+                                :rules="[v => !!v || '¡Debes estar de acuerdo para continuar!']"
+                                name="terms"
+                                required
+                            >
+                                <template v-slot:label>
+                                    <div class="ml-2 text-wrap">
+                                        Estoy de acuerdo con los
+                                        <a :href="route('terms.show')"
+                                           class="underline text-sm  rounded-md focus:outline-none"
+                                           target="_blank">
+                                            Términos de servicio
+                                        </a>
+                                        y
+                                        <a :href="route('policy.show')"
+                                           class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                           target="_blank">
+                                            política de privacidad
+                                        </a>
+                                    </div>
+                                </template>
 
-                        <div class="ms-2">
-                            I agree to the <a target="_blank" :href="route('terms.show')" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Terms of Service</a> and <a target="_blank" :href="route('policy.show')" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Privacy Policy</a>
+                            </v-checkbox>
+
+
                         </div>
-                    </div>
-                    <InputError class="mt-2" :message="form.errors.terms" />
-                </InputLabel>
-            </div>
+                        <InputError :message="form.errors.terms" class="mt-2"/>
+                    </InputLabel>
+                </div>
 
-            <div class="flex items-center justify-end mt-4">
-                <Link :href="route('login')" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                    Already registered?
-                </Link>
 
-                <PrimaryButton class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Register
-                </PrimaryButton>
-            </div>
-        </form>
-    </AuthenticationCard>
+                <v-btn :class="{ 'opacity-25': form.processing }" :disabled="form.processing" block color="primary"
+                       variant="elevated">
+                    Registrarse
+                </v-btn>
+
+                <v-btn block class="my-4 "
+                       color="primary"
+                       variant="outlined"
+                       @click="reset"
+                >
+                    Reiniciar formulario
+                </v-btn>
+            </form>
+        </AuthenticationCard>
+    </auth-layout>
 </template>
